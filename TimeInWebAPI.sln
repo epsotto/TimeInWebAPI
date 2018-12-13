@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeInEmployeeService", "TimeInEmployeeService\TimeInEmployeeService.csproj", "{96DFAAF6-2720-4FAF-B260-1B6B1744B206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeInAdminService", "TimeInAdminService\TimeInAdminService.csproj", "{04616212-A67B-4595-B7AD-0FF064EA25CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeInRepository", "TimeInRepository\TimeInRepository.csproj", "{DD171716-11AE-462E-9981-00D62A70D964}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeInAdmin.Service.Test", "TimeInAdmin.Service.Test\TimeInAdmin.Service.Test.csproj", "{95AE7CB9-55EF-435C-9AF9-99BA89EEC1F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeInEmployee.Service.Test", "TimeInEmployee.Service.Test\TimeInEmployee.Service.Test.csproj", "{494641CB-EC03-4149-B6CB-3E22A36B8C38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginService", "LoginService\LoginService.csproj", "{1B04B395-C563-4A93-9D6A-12D292E299F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Login.Service.Test", "Login.Service.Test\Login.Service.Test.csproj", "{FCB1D754-C33D-478D-AEEA-CF27E61A5DC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96DFAAF6-2720-4FAF-B260-1B6B1744B206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96DFAAF6-2720-4FAF-B260-1B6B1744B206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96DFAAF6-2720-4FAF-B260-1B6B1744B206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96DFAAF6-2720-4FAF-B260-1B6B1744B206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04616212-A67B-4595-B7AD-0FF064EA25CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04616212-A67B-4595-B7AD-0FF064EA25CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04616212-A67B-4595-B7AD-0FF064EA25CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04616212-A67B-4595-B7AD-0FF064EA25CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD171716-11AE-462E-9981-00D62A70D964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD171716-11AE-462E-9981-00D62A70D964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD171716-11AE-462E-9981-00D62A70D964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD171716-11AE-462E-9981-00D62A70D964}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95AE7CB9-55EF-435C-9AF9-99BA89EEC1F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95AE7CB9-55EF-435C-9AF9-99BA89EEC1F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95AE7CB9-55EF-435C-9AF9-99BA89EEC1F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95AE7CB9-55EF-435C-9AF9-99BA89EEC1F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{494641CB-EC03-4149-B6CB-3E22A36B8C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{494641CB-EC03-4149-B6CB-3E22A36B8C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{494641CB-EC03-4149-B6CB-3E22A36B8C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{494641CB-EC03-4149-B6CB-3E22A36B8C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B04B395-C563-4A93-9D6A-12D292E299F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B04B395-C563-4A93-9D6A-12D292E299F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B04B395-C563-4A93-9D6A-12D292E299F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B04B395-C563-4A93-9D6A-12D292E299F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB1D754-C33D-478D-AEEA-CF27E61A5DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB1D754-C33D-478D-AEEA-CF27E61A5DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB1D754-C33D-478D-AEEA-CF27E61A5DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB1D754-C33D-478D-AEEA-CF27E61A5DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+		SolutionGuid = {DCA203AA-DEFD-4AFB-94BB-5B456B8E4AB3}
+	EndGlobalSection
+EndGlobal

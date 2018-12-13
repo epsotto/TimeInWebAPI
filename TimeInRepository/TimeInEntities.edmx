@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TimeInModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActivityNm" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreateDttm" Type="datetime" Nullable="false" />
+          <Property Name="CreateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UpdateDttm" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DailyTimeIn">
+          <Key>
+            <PropertyRef Name="TimeInId" />
+          </Key>
+          <Property Name="TimeInId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="ActivityCd" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="TimeInDttm" Type="datetime" Nullable="false" />
+          <Property Name="CreateDttm" Type="datetime" Nullable="false" />
+          <Property Name="CreateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UpdateDttm" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DailyTimeOut">
+          <Key>
+            <PropertyRef Name="TimeInId" />
+          </Key>
+          <Property Name="TimeInId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="ActivityCd" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="TimeOutDttm" Type="datetime" Nullable="false" />
+          <Property Name="CreateDttm" Type="datetime" Nullable="false" />
+          <Property Name="CreateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UpdateDttm" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserKey" />
+          </Key>
+          <Property Name="UserKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreateDttm" Type="datetime" Nullable="false" />
+          <Property Name="CreateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UpdateDttm" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUserId" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Activity_ActivityId">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
+          <End Role="DailyTimeIn" Type="Self.DailyTimeIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="DailyTimeIn">
+              <PropertyRef Name="ActivityCd" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_ActivityId_TimeOut">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
+          <End Role="DailyTimeOut" Type="Self.DailyTimeOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="DailyTimeOut">
+              <PropertyRef Name="ActivityCd" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserKey">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="DailyTimeIn" Type="Self.DailyTimeIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserKey" />
+            </Principal>
+            <Dependent Role="DailyTimeIn">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserKey_TimeOut">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="DailyTimeOut" Type="Self.DailyTimeOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserKey" />
+            </Principal>
+            <Dependent Role="DailyTimeOut">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TimeInModelStoreContainer">
+          <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DailyTimeIn" EntityType="Self.DailyTimeIn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DailyTimeOut" EntityType="Self.DailyTimeOut" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Activity_ActivityId" Association="Self.FK_Activity_ActivityId">
+            <End Role="Activity" EntitySet="Activity" />
+            <End Role="DailyTimeIn" EntitySet="DailyTimeIn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_ActivityId_TimeOut" Association="Self.FK_Activity_ActivityId_TimeOut">
+            <End Role="Activity" EntitySet="Activity" />
+            <End Role="DailyTimeOut" EntitySet="DailyTimeOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserKey" Association="Self.FK_User_UserKey">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="DailyTimeIn" EntitySet="DailyTimeIn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserKey_TimeOut" Association="Self.FK_User_UserKey_TimeOut">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="DailyTimeOut" EntitySet="DailyTimeOut" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TimeInModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TimeInEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Activities" EntityType="TimeInModel.Activity" />
+          <EntitySet Name="DailyTimeIns" EntityType="TimeInModel.DailyTimeIn" />
+          <EntitySet Name="DailyTimeOuts" EntityType="TimeInModel.DailyTimeOut" />
+          <EntitySet Name="Users" EntityType="TimeInModel.User" />
+          <AssociationSet Name="FK_Activity_ActivityId" Association="TimeInModel.FK_Activity_ActivityId">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="DailyTimeIn" EntitySet="DailyTimeIns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_ActivityId_TimeOut" Association="TimeInModel.FK_Activity_ActivityId_TimeOut">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="DailyTimeOut" EntitySet="DailyTimeOuts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserKey" Association="TimeInModel.FK_User_UserKey">
+            <End Role="User" EntitySet="Users" />
+            <End Role="DailyTimeIn" EntitySet="DailyTimeIns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserKey_TimeOut" Association="TimeInModel.FK_User_UserKey_TimeOut">
+            <End Role="User" EntitySet="Users" />
+            <End Role="DailyTimeOut" EntitySet="DailyTimeOuts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityNm" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DailyTimeIns" Relationship="TimeInModel.FK_Activity_ActivityId" FromRole="Activity" ToRole="DailyTimeIn" />
+          <NavigationProperty Name="DailyTimeOuts" Relationship="TimeInModel.FK_Activity_ActivityId_TimeOut" FromRole="Activity" ToRole="DailyTimeOut" />
+        </EntityType>
+        <EntityType Name="DailyTimeIn">
+          <Key>
+            <PropertyRef Name="TimeInId" />
+          </Key>
+          <Property Name="TimeInId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="ActivityCd" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="TimeInDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="TimeInModel.FK_Activity_ActivityId" FromRole="DailyTimeIn" ToRole="Activity" />
+          <NavigationProperty Name="User" Relationship="TimeInModel.FK_User_UserKey" FromRole="DailyTimeIn" ToRole="User" />
+        </EntityType>
+        <EntityType Name="DailyTimeOut">
+          <Key>
+            <PropertyRef Name="TimeInId" />
+          </Key>
+          <Property Name="TimeInId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="ActivityCd" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="TimeOutDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="TimeInModel.FK_Activity_ActivityId_TimeOut" FromRole="DailyTimeOut" ToRole="Activity" />
+          <NavigationProperty Name="User" Relationship="TimeInModel.FK_User_UserKey_TimeOut" FromRole="DailyTimeOut" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserKey" />
+          </Key>
+          <Property Name="UserKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateDttm" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUserId" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DailyTimeIns" Relationship="TimeInModel.FK_User_UserKey" FromRole="User" ToRole="DailyTimeIn" />
+          <NavigationProperty Name="DailyTimeOuts" Relationship="TimeInModel.FK_User_UserKey_TimeOut" FromRole="User" ToRole="DailyTimeOut" />
+        </EntityType>
+        <Association Name="FK_Activity_ActivityId">
+          <End Type="TimeInModel.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="TimeInModel.DailyTimeIn" Role="DailyTimeIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="DailyTimeIn">
+              <PropertyRef Name="ActivityCd" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_ActivityId_TimeOut">
+          <End Type="TimeInModel.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="TimeInModel.DailyTimeOut" Role="DailyTimeOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="DailyTimeOut">
+              <PropertyRef Name="ActivityCd" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserKey">
+          <End Type="TimeInModel.User" Role="User" Multiplicity="1" />
+          <End Type="TimeInModel.DailyTimeIn" Role="DailyTimeIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserKey" />
+            </Principal>
+            <Dependent Role="DailyTimeIn">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserKey_TimeOut">
+          <End Type="TimeInModel.User" Role="User" Multiplicity="1" />
+          <End Type="TimeInModel.DailyTimeOut" Role="DailyTimeOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserKey" />
+            </Principal>
+            <Dependent Role="DailyTimeOut">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TimeInModelStoreContainer" CdmEntityContainer="TimeInEntities">
+          <EntitySetMapping Name="Activities">
+            <EntityTypeMapping TypeName="TimeInModel.Activity">
+              <MappingFragment StoreEntitySet="Activity">
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="UpdateDttm" ColumnName="UpdateDttm" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="CreateDttm" ColumnName="CreateDttm" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ActivityNm" ColumnName="ActivityNm" />
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyTimeIns">
+            <EntityTypeMapping TypeName="TimeInModel.DailyTimeIn">
+              <MappingFragment StoreEntitySet="DailyTimeIn">
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="UpdateDttm" ColumnName="UpdateDttm" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="CreateDttm" ColumnName="CreateDttm" />
+                <ScalarProperty Name="TimeInDttm" ColumnName="TimeInDttm" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ActivityCd" ColumnName="ActivityCd" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="TimeInId" ColumnName="TimeInId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyTimeOuts">
+            <EntityTypeMapping TypeName="TimeInModel.DailyTimeOut">
+              <MappingFragment StoreEntitySet="DailyTimeOut">
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="UpdateDttm" ColumnName="UpdateDttm" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="CreateDttm" ColumnName="CreateDttm" />
+                <ScalarProperty Name="TimeOutDttm" ColumnName="TimeOutDttm" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ActivityCd" ColumnName="ActivityCd" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="TimeInId" ColumnName="TimeInId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="TimeInModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="UpdateDttm" ColumnName="UpdateDttm" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="CreateDttm" ColumnName="CreateDttm" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserKey" ColumnName="UserKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
