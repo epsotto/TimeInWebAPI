@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace LoginService.Models
 {
     [DataContract]
-    public class AuthenticateModel
+    public class VerifyClockInModel
     {
         [DataMember]
-        public string UserName { get; set; }
+        public bool ClockedIn { get; set; }
 
         [DataMember]
-        public string Password { get; set; }
+        public string QueryStatus { get; set; }
     }
 }

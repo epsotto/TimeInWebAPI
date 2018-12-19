@@ -30,7 +30,22 @@ namespace LoginService.Controllers
             using (var scope = container.BeginLifetimeScope())
             {
                 var app = scope.Resolve<ILoginBusinessRules>();
-                String verifyResult = app.VerifyValidUser(auth);
+                string verifyResult = app.VerifyValidUser(auth);
+                return Json(new { Result = verifyResult });
+            }
+        }
+
+        [Route("api/Login/VerifyEmployeeClockIn")]
+        [HttpPost]
+        public IHttpActionResult VerifyEmployeeClockIn([FromBody]string userName)
+        {
+            var container = ContainerConfig.Configure();
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<ILoginBusinessRules>();
+                VerifyClockInModel verifyResult = app.VerifyEmployeeClockIn(userName);
+
                 return Json(new { Result = verifyResult });
             }
         }

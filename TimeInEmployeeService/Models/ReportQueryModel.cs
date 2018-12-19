@@ -7,7 +7,7 @@ using System.Web;
 namespace TimeInEmployeeService.Models
 {
     [DataContract]
-    public class ReportModel
+    public class ReportQueryModel
     {
         [DataMember]
         public string UserName { get; set; }

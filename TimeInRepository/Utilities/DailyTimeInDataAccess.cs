@@ -17,13 +17,13 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<DailyTimeIn> GetDailyTimeIn(string date)
+        public List<DailyTimeIn> GetDailyTimeIn(DateTime date)
         {
             List<DailyTimeIn> timeInList = new List<DailyTimeIn>();
 
             using(TimeInEntities context = new TimeInEntities())
             {
-                timeInList = context.DailyTimeIns.Where(x => x.UpdateDttm.Date == DateTime.Parse(date).Date).ToList();
+                timeInList = context.DailyTimeIns.Where(x => x.UpdateDttm.Date == date.Date).ToList();
             }
 
             return timeInList;
@@ -34,10 +34,9 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<DailyTimeIn> GetMonthTimeIn(string date)
+        public List<DailyTimeIn> GetMonthTimeIn(DateTime date)
         {
-            DateTime currentDate = DateTime.Parse(date);
-            DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+            DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
             List<DailyTimeIn> timeInList = new List<DailyTimeIn>();
@@ -83,6 +82,45 @@ namespace TimeInRepository.Utilities
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userKey"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public List<DailyTimeIn> GetEmployeeMonthTimeIn(int userKey, DateTime month)
+        {
+            DateTime firstDayOfMonth = new DateTime(month.Year, month.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            using (TimeInEntities context = new TimeInEntities())
+            {
+                var query = context.DailyTimeIns.Where(x => x.EmployeeId == userKey
+                && (x.TimeInDttm > firstDayOfMonth && x.TimeInDttm < lastDayOfMonth)
+                && x.IsActive == true)
+                    .ToList();
+
+                return query;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public DailyTimeIn GetEmployeeDailyTimeIn(string userName)
+        {
+            DateTime today = DateTime.Now.Date;
+
+            using (TimeInEntities context = new TimeInEntities())
+            {
+                var query = context.DailyTimeIns.Where(x => x.User.UserName.Equals(userName) 
+                && x.IsActive && x.TimeInDttm.Date == today).FirstOrDefault();
+                return query;
+            }
         }
     }
 }

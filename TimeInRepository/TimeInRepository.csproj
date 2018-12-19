@@ -58,6 +58,7 @@
     <Compile Include="Activity.cs">
       <DependentUpon>TimeInEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClockOutQueryModel.cs" />
     <Compile Include="Utilities\ActivityDataAccess.cs" />
     <Compile Include="DailyTimeIn.cs">
       <DependentUpon>TimeInEntities.tt</DependentUpon>

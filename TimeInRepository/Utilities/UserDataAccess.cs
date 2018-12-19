@@ -16,7 +16,7 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public User GetUser(String userName)
+        public User GetUser(string userName)
         {
             User userQuery = new User();
 
@@ -35,7 +35,7 @@ namespace TimeInRepository.Utilities
         /// <param name="lastName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public bool VerifyPassword(String firstName, String lastName, String password)
+        public bool VerifyPassword(string firstName, string lastName, string password)
         {
             using (TimeInEntities context = new TimeInEntities())
             {
@@ -63,7 +63,7 @@ namespace TimeInRepository.Utilities
         /// <param name="lastName"></param>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public String InsertNewUser(String firstName, String lastName, String userName)
+        public string InsertNewUser(string firstName, string lastName, string userName)
         {
             User newUser = new User();
 
@@ -99,7 +99,7 @@ namespace TimeInRepository.Utilities
         /// <param name="userId"></param>
         /// <param name="newPassword"></param>
         /// <returns></returns>
-        public String UpdatePassword(int userId, String newPassword)
+        public string UpdatePassword(int userId, string newPassword)
         {
             User userQuery = new User();
 

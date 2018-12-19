@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeInRepository.Models;
 
 namespace TimeInRepository.Utilities
 {
@@ -13,13 +14,13 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<DailyTimeOut> GetDailyTimeOut(string date)
+        public List<DailyTimeOut> GetDailyTimeOut(DateTime date)
         {
             List<DailyTimeOut> timeOutList = new List<DailyTimeOut>();
 
             using (TimeInEntities context = new TimeInEntities())
             {
-                timeOutList = context.DailyTimeOuts.Where(x => x.UpdateDttm.Date == DateTime.Parse(date).Date).ToList();
+                timeOutList = context.DailyTimeOuts.Where(x => x.UpdateDttm.Date == date.Date).ToList();
             }
 
             return timeOutList;
@@ -30,10 +31,9 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<DailyTimeOut> GetMonthTimeIn(string date)
+        public List<DailyTimeOut> GetMonthTimeOut(DateTime date)
         {
-            DateTime currentDate = DateTime.Parse(date);
-            DateTime firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+            DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
             List<DailyTimeOut> timeOutList = new List<DailyTimeOut>();
@@ -53,7 +53,7 @@ namespace TimeInRepository.Utilities
         /// <param name="activityId"></param>
         /// <param name="employeeName"></param>
         /// <returns></returns>
-        public String InsertTimeIn(int userId, int activityId, String employeeName)
+        public bool InsertTimeOut(ClockOutQueryModel clockOut)
         {
             DailyTimeOut newRecord = new DailyTimeOut();
 
@@ -61,24 +61,63 @@ namespace TimeInRepository.Utilities
             {
                 using (TimeInEntities context = new TimeInEntities())
                 {
-                    newRecord.EmployeeId = userId;
-                    newRecord.ActivityCd = activityId;
-                    newRecord.TimeOutDttm = DateTime.Now;
+                    newRecord.EmployeeId = clockOut.UserId;
+                    newRecord.ActivityCd = clockOut.ActivityId;
+                    newRecord.TimeOutDttm = clockOut.ClockOutDateTime;
                     newRecord.IsActive = true;
                     newRecord.CreateDttm = DateTime.Now;
-                    newRecord.CreateUserId = employeeName;
+                    newRecord.CreateUserId = clockOut.UserName;
                     newRecord.UpdateDttm = DateTime.Now;
-                    newRecord.UpdateUserId = employeeName;
+                    newRecord.UpdateUserId = clockOut.UserName;
 
                     context.DailyTimeOuts.Add(newRecord);
                 }
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return false;
             }
 
-            return "Daily Time In record created.";
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userKey"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public List<DailyTimeOut> GetEmployeeMonthTimeOut(int userKey, DateTime month)
+        {
+            DateTime firstDayOfMonth = new DateTime(month.Year, month.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            using (TimeInEntities context = new TimeInEntities())
+            {
+                var query = context.DailyTimeOuts.Where(x => x.EmployeeId == userKey
+                && (x.TimeOutDttm > firstDayOfMonth && x.TimeOutDttm < lastDayOfMonth)
+                && x.IsActive == true)
+                    .ToList();
+
+                return query;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public DailyTimeOut GetEmployeeDailyTimeOut(string userName)
+        {
+            DateTime today = DateTime.Now.Date;
+
+            using (TimeInEntities context = new TimeInEntities())
+            {
+                var query = context.DailyTimeOuts.Where(x => x.User.UserName.Equals(userName)
+                && x.IsActive && x.TimeOutDttm.Date == today).FirstOrDefault();
+                return query;
+            }
         }
     }
 }

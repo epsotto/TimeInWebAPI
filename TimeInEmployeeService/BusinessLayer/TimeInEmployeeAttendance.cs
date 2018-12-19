@@ -20,14 +20,15 @@ namespace TimeInEmployeeService.BusinessLayer
             _dataAccess = dataAccess;
         }
 
-        public String ClockInEmployee(ClockInQueryModel clockIn)
+        public string ClockInEmployee(ClockInQueryModel clockIn)
         {
             if (clockIn == null)
             {
                 return "No data is being processed.";
             }
 
-            if (String.IsNullOrEmpty(clockIn.UserName) || clockIn.UserId < 10000)
+            if (string.IsNullOrEmpty(clockIn.UserName) 
+                || clockIn.UserId < 10000)
             {
                 return "User not found.";
             }
@@ -44,13 +45,13 @@ namespace TimeInEmployeeService.BusinessLayer
             }
 
             bool isSuccess = _dataAccess.InsertTimeIn(clockIn);
-            return isSuccess.ToString();
+            //return isSuccess.Tostring();
             if (isSuccess)
             {
                 return "Employee successfully clocked in.";
             }
 
-            return String.Empty;
+            return string.Empty;
         }
     }
 }

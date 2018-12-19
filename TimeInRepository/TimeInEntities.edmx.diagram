@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bbc09d831d3b4e60965cf83553b03dff" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="bbc09d831d3b4e60965cf83553b03dff" Name="Diagram1" ZoomLevel="97">
         <EntityTypeShape EntityType="TimeInModel.Activity" Width="1.5" PointX="0.75" PointY="0.875" />
         <EntityTypeShape EntityType="TimeInModel.DailyTimeIn" Width="1.5" PointX="3" PointY="3.625" />
         <EntityTypeShape EntityType="TimeInModel.DailyTimeOut" Width="1.5" PointX="4.875" PointY="4" />

@@ -9,7 +9,7 @@ namespace TimeInRepository.Models
     /// <summary>
     /// 
     /// </summary>
-    public class ClockInQueryModel
+    public class ClockOutQueryModel
     {
         /// <summary>
         /// 
@@ -29,6 +29,6 @@ namespace TimeInRepository.Models
         /// <summary>
         /// 
         /// </summary>
-        public DateTime ClockInDateTime { get; set; }
+        public DateTime ClockOutDateTime { get; set; }
     }
 }

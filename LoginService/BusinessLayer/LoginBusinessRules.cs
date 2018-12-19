@@ -18,10 +18,12 @@ namespace LoginService.BusinessLayer
     public class LoginBusinessRules : ILoginBusinessRules
     {
         IUserDataAccess _userDataAccess;
+        IDailyTimeInDataAccess _timeInDataAccess;
 
-        public LoginBusinessRules(IUserDataAccess userDataDataAccess)
+        public LoginBusinessRules(IUserDataAccess userDataDataAccess, IDailyTimeInDataAccess timeInDataAccess)
         {
             _userDataAccess = userDataDataAccess;
+            _timeInDataAccess = timeInDataAccess;
         }
 
         private readonly static string hash = "t!m3!N";
@@ -32,19 +34,54 @@ namespace LoginService.BusinessLayer
         /// <param name="userData"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public String VerifyValidUser(AuthenticateModel auth)
+        public string VerifyValidUser(AuthenticateModel auth)
         {
             var container = ContainerConfig.Configure();
 
             var userData = _userDataAccess.GetUser(auth.UserName);
 
-            if (auth.Password == String.Empty) { return "Password is empty."; }
+            if(userData == null)
+            {
+                return "Employee not found.";
+            }
 
-            String decryptedPassword = DecryptPassword(userData.UserPassword);
+            if (auth.Password == string.Empty) { return "Password is empty."; }
 
-            if (auth.Password != decryptedPassword) { return "Password does not match."; }
+            string decryptedPassword = EncryptPassword(auth.Password);
+
+            if (userData.UserPassword != decryptedPassword) { return "Password does not match."; }
 
             return "Password matched.";
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public VerifyClockInModel VerifyEmployeeClockIn(string userName)
+        {
+            VerifyClockInModel result = new VerifyClockInModel();
+            result.ClockedIn = false;
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                result.QueryStatus = "No data being processed.";
+                return result;
+            }
+
+            var query = _timeInDataAccess.GetEmployeeDailyTimeIn(userName);
+            if(query == null)
+            {
+                result.QueryStatus = "Query success.";
+                return result;
+            }
+            else
+            {
+                result.QueryStatus = "Query success.";
+                result.ClockedIn = true;
+                return result;
+            }
         }
 
         /// <summary>
@@ -52,24 +89,24 @@ namespace LoginService.BusinessLayer
         /// </summary>
         /// <param name="password"></param>
         /// <returns></returns>
-        public String DecryptPassword(String password)
+        public string EncryptPassword(string password)
         {
-            String decryptedPassword = String.Empty;
-            if (String.IsNullOrEmpty(password)) return String.Empty;
+            string encryptedPassword = string.Empty;
+            if (string.IsNullOrEmpty(password)) return string.Empty;
 
-            byte[] data = Convert.FromBase64String(password);
+            byte[] data = UTF8Encoding.UTF8.GetBytes(password);
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
             {
                 byte[] keys = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(hash));
                 using(TripleDESCryptoServiceProvider tripDes = new TripleDESCryptoServiceProvider() { Key = keys, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 })
                 {
-                    ICryptoTransform transform = tripDes.CreateDecryptor();
+                    ICryptoTransform transform = tripDes.CreateEncryptor();
                     byte[] results = transform.TransformFinalBlock(data, 0, data.Length);
-                    decryptedPassword = UTF8Encoding.UTF8.GetString(results);
+                    encryptedPassword = Convert.ToBase64String(results,0,results.Length);
                 }
             }
 
-            return decryptedPassword;
+            return encryptedPassword;
         }
     }
 }

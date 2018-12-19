@@ -49,7 +49,7 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="newActivity"></param>
         /// <returns></returns>
-        public String InsertActivity(Activity newActivity)
+        public string InsertActivity(Activity newActivity)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace TimeInRepository.Utilities
         /// <param name="activityId"></param>
         /// <param name="newActivity"></param>
         /// <returns></returns>
-        public String UpdateActivity(int activityId, Activity newActivity)
+        public string UpdateActivity(int activityId, Activity newActivity)
         {
             Activity activityQuery = new Activity();
 
@@ -104,7 +104,7 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="activityId"></param>
         /// <returns></returns>
-        public String DeleteActivity(int activityId)
+        public string DeleteActivity(int activityId)
         {
             try
             {

@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using TimeInRepository.Models;
 
 namespace TimeInRepository.Utilities
 {
-    interface IDailyTimeOutDataAccess
+    public interface IDailyTimeOutDataAccess
     {
-        List<DailyTimeOut> GetDailyTimeOut(string date);
-        List<DailyTimeOut> GetMonthTimeIn(string date);
-        string InsertTimeIn(int userId, int activityId, string employeeName);
+        List<DailyTimeOut> GetDailyTimeOut(DateTime date);
+        List<DailyTimeOut> GetMonthTimeOut(DateTime date);
+        bool InsertTimeOut(ClockOutQueryModel clockOut);
+        List<DailyTimeOut> GetEmployeeMonthTimeOut(int userKey, DateTime month);
+        DailyTimeOut GetEmployeeDailyTimeOut(string userName);
     }
 }

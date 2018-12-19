@@ -16,6 +16,8 @@ namespace TimeInEmployeeService
             var builder = new ContainerBuilder();
 
             builder.RegisterType<TimeInEmployeeAttendance>().As<ITimeInEmployeeAttendance>();
+            builder.RegisterType<TimeOutEmployeeAttendance>().As<ITimeOutEmployeeAttendance>();
+            builder.RegisterType<TimeInEmployeeReport>().As<ITimeInEmployeeReport>();
 
             builder.RegisterAssemblyTypes(Assembly.Load(nameof(TimeInRepository)))
                 .Where(t => t.Namespace.Contains("Utilities"))

@@ -5,6 +5,7 @@ namespace LoginService.Interfaces
     public interface ILoginBusinessRules
     {
         string VerifyValidUser(AuthenticateModel password);
-        string DecryptPassword(string password);
+        string EncryptPassword(string password);
+        VerifyClockInModel VerifyEmployeeClockIn(string userName);
     }
 }

@@ -11,6 +11,7 @@ using TimeInEmployeeService;
 using Autofac;
 using TimeInEmployeeService.Interfaces;
 using TimeInRepository.Utilities;
+using TimeInEmployeeService.BusinessLayer;
 
 namespace TimeInEmployee.Service.Test
 {
@@ -18,7 +19,7 @@ namespace TimeInEmployee.Service.Test
     /// 
     /// </summary>
     [TestFixture]
-    public class ClockInEmployeeTest
+    public class TimeInEmployeeAttendanceTest
     {
         [Test]
         public void ClockInEmployeeTest_WhenEmployeeUserNameIsBlank_ReturnsUserIsBlankError()
@@ -32,12 +33,12 @@ namespace TimeInEmployee.Service.Test
                 ClockInQueryModel clockIn = new ClockInQueryModel
                 {
                     UserId = 10001,
-                    UserName = String.Empty,
+                    UserName = string.Empty,
                     ActivityId = 1,
                     ClockInDateTime = DateTime.Now
                 };
 
-                String output = app.ClockInEmployee(clockIn);
+                string output = app.ClockInEmployee(clockIn);
 
                 Assert.AreEqual("User not found.", output);
             }
@@ -60,7 +61,7 @@ namespace TimeInEmployee.Service.Test
                     ClockInDateTime = DateTime.Now
                 };
 
-                String output = app.ClockInEmployee(clockIn);
+                string output = app.ClockInEmployee(clockIn);
 
                 Assert.AreEqual("User not found.", output);
             }
@@ -83,7 +84,7 @@ namespace TimeInEmployee.Service.Test
                     ClockInDateTime = DateTime.Parse("1800-01-01")
                 };
 
-                String output = app.ClockInEmployee(clockIn);
+                string output = app.ClockInEmployee(clockIn);
 
                 Assert.AreEqual("Date is out of bounds.", output);
             }
@@ -106,7 +107,7 @@ namespace TimeInEmployee.Service.Test
                     ClockInDateTime = DateTime.Now.AddMonths(1)
                 };
 
-                String output = app.ClockInEmployee(clockIn);
+                string output = app.ClockInEmployee(clockIn);
 
                 Assert.AreEqual("Date is out of bounds.", output);
             }
@@ -129,7 +130,7 @@ namespace TimeInEmployee.Service.Test
                     ClockInDateTime = DateTime.Now
                 };
 
-                String output = app.ClockInEmployee(clockIn);
+                string output = app.ClockInEmployee(clockIn);
 
                 Assert.AreEqual("Activity ID not found.", output);
             }
@@ -140,25 +141,22 @@ namespace TimeInEmployee.Service.Test
         {
             var container = ContainerConfig.Configure();
 
-            using (var scope = container.BeginLifetimeScope())
+            ClockInQueryModel clockIn = new ClockInQueryModel
             {
-                var app = scope.Resolve<ITimeInEmployeeAttendance>();
+                UserId = 10001,
+                UserName = "john.doe",
+                ActivityId = 1,
+                ClockInDateTime = DateTime.Now
+            };
 
-                ClockInQueryModel clockIn = new ClockInQueryModel
-                {
-                    UserId = 10001,
-                    UserName = "john.doe",
-                    ActivityId = 1,
-                    ClockInDateTime = DateTime.Now
-                };
+            Mock<IDailyTimeInDataAccess> mock = new Mock<IDailyTimeInDataAccess>();
+            mock.Setup(x => x.InsertTimeIn(clockIn)).Returns(true);
 
-                Mock<IDailyTimeInDataAccess> mock = new Mock<IDailyTimeInDataAccess>();
-                mock.Setup(x => x.InsertTimeIn(clockIn)).Returns(true);
+            ITimeInEmployeeAttendance app = new TimeInEmployeeAttendance(mock.Object);
 
-                String output = app.ClockInEmployee(clockIn);
+            string output = app.ClockInEmployee(clockIn);
 
-                Assert.AreEqual("Employee successfully clocked in.", output);
-            }
+            Assert.AreEqual("Employee successfully clocked in.", output);
         }
     }
 }

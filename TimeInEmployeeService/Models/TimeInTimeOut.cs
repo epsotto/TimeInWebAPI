@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
+using TimeInRepository;
 
 namespace TimeInEmployeeService.Models
 {
     [DataContract]
-    public class ClockOutModel
+    public class TimeInTimeOut
     {
         [DataMember]
-        public string UserName { get; set; }
+        public string ActivityName { get; set; }
 
         [DataMember]
-        public string ClockOutDateTime { get; set; }
+        public DateTime TimeInDateTime { get; set; }
 
         [DataMember]
-        public int ActivityId { get; set; }
+        public DateTime TImeOutDateTime { get; set; }
     }
 }

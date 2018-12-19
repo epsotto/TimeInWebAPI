@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
+using TimeInRepository;
 
 namespace TimeInEmployeeService.Models
 {
     [DataContract]
-    public class ClockOutModel
+    public class GeneratedReportModel
     {
         [DataMember]
-        public string UserName { get; set; }
+        public List<TimeInTimeOut> TimeList { get; set; }
 
         [DataMember]
-        public string ClockOutDateTime { get; set; }
-
-        [DataMember]
-        public int ActivityId { get; set; }
+        public string QueryStatus { get; set; }
     }
 }

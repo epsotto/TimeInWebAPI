@@ -16,11 +16,14 @@ namespace TimeInEmployeeService.Controllers
 {
     public class TimeInEmployeeController : ApiController
     {
+        [Route("api/TimeInEmployee/ClockInEmployee")]
+        [HttpPost]
         public IHttpActionResult ClockInEmployee([FromBody]ClockInModel clockIn)
         {
             var container = ContainerConfig.Configure();
 
             User userQuery = new User();
+            Activity activityQuery = new Activity();
 
             if (clockIn == null)
                 {
@@ -43,7 +46,7 @@ namespace TimeInEmployeeService.Controllers
             {
                 var app = scope.Resolve<IActivityDataAccess>();
 
-                var activityQuery = app.GetActivitySingle(clockIn.ActivityId);
+                activityQuery = app.GetActivitySingle(clockIn.ActivityId);
                 if (activityQuery == null)
                 {
                     return Json(new { Result = "Activity selected is unknown." });
@@ -57,25 +60,90 @@ namespace TimeInEmployeeService.Controllers
                 {
                     UserId = userQuery.UserKey,
                     UserName = clockIn.UserName,
-                    ActivityId = 0,//activityQuery.ActivityId,
+                    ActivityId = activityQuery.ActivityId,
                     ClockInDateTime = DateTime.Parse(clockIn.ClockInDateTime)
                 };
 
-                String clockInResult = app.ClockInEmployee(clockQuery);
+                string clockInResult = app.ClockInEmployee(clockQuery);
 
-                return Json(clockIn);
+                return Json(clockInResult);
             }
         }
 
-        public IHttpActionResult ClockOutEmployee([FromBody]ClockOutModel clockIn)
+        [Route("api/TimeInEmployee/ClockOutEmployee")]
+        [HttpPost]
+        public IHttpActionResult ClockOutEmployee([FromBody]ClockOutModel clockOut)
         {
+            var container = ContainerConfig.Configure();
 
-            return Json(clockIn);
+            User userQuery = new User();
+            Activity activityQuery = new Activity();
+
+            if (clockOut == null)
+            {
+                return Json(new { Result = "Internal server error.", StatusCode = HttpStatusCode.InternalServerError });
+            }
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<IUserDataAccess>();
+
+                userQuery = app.GetUser(clockOut.UserName);
+
+                if (userQuery == null)
+                {
+                    return Json(new { Result = "Employee record not found." });
+                }
+            }
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<IActivityDataAccess>();
+
+                activityQuery = app.GetActivitySingle(clockOut.ActivityId);
+                if (activityQuery == null)
+                {
+                    return Json(new { Result = "Activity selected is unknown." });
+                }
+            }
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<ITimeInEmployeeAttendance>();
+                ClockInQueryModel clockQuery = new ClockInQueryModel
+                {
+                    UserId = userQuery.UserKey,
+                    UserName = clockOut.UserName,
+                    ActivityId = activityQuery.ActivityId,
+                    ClockInDateTime = DateTime.Parse(clockOut.ClockOutDateTime)
+                };
+
+                string clockInResult = app.ClockInEmployee(clockQuery);
+
+                return Json(clockInResult);
+            }
         }
 
-        public IHttpActionResult GenerateEmployeeMonthyReport([FromBody]ReportModel employeeReport)
+        [Route("api/TimeInEmployee/GenerateEmployeeMonthyReport")]
+        [HttpPost]
+        public IHttpActionResult GenerateEmployeeMonthyReport([FromBody]ReportQueryModel employeeReport)
         {
-            return Json(employeeReport);
+            var container = ContainerConfig.Configure();
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<ITimeInEmployeeReport>();
+
+                ReportQueryModel getReport = new ReportQueryModel()
+                {
+                    ReportDate = employeeReport.ReportDate,
+                    UserName = employeeReport.UserName
+                };
+
+                GeneratedReportModel result = app.GenerateMonthlyReport(getReport);
+
+                return Json(result);
+            }
         }
     }
 }
