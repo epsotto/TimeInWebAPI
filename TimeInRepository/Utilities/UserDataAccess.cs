@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -111,7 +112,11 @@ namespace TimeInRepository.Utilities
 
                     userQuery.UserPassword = newPassword;
                     userQuery.UpdateDttm = DateTime.Now;
-                    userQuery.UpdateUserId = userQuery.FirstName + userQuery.LastName;
+                    userQuery.UpdateUserId = userQuery.UserName;
+
+                    context.Users.Attach(userQuery);
+                    context.Entry(userQuery).State = System.Data.Entity.EntityState.Modified;
+                    context.SaveChanges();
                 }
             }
             catch(Exception ex)

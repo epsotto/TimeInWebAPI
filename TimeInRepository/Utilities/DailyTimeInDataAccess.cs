@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,6 +75,7 @@ namespace TimeInRepository.Utilities
                     newRecord.UpdateUserId = clockIn.UserName;
 
                     context.DailyTimeIns.Add(newRecord);
+                    context.SaveChanges();
                 }
             }
             catch(Exception ex)
@@ -97,7 +99,7 @@ namespace TimeInRepository.Utilities
 
             using (TimeInEntities context = new TimeInEntities())
             {
-                var query = context.DailyTimeIns.Where(x => x.EmployeeId == userKey
+                var query = context.DailyTimeIns.Include("Activity").Where(x => x.EmployeeId == userKey
                 && (x.TimeInDttm > firstDayOfMonth && x.TimeInDttm < lastDayOfMonth)
                 && x.IsActive == true)
                     .ToList();
@@ -111,14 +113,12 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public DailyTimeIn GetEmployeeDailyTimeIn(string userName)
+        public DailyTimeIn GetEmployeeRecentTimeIn(string userName)
         {
-            DateTime today = DateTime.Now.Date;
-
             using (TimeInEntities context = new TimeInEntities())
             {
-                var query = context.DailyTimeIns.Where(x => x.User.UserName.Equals(userName) 
-                && x.IsActive && x.TimeInDttm.Date == today).FirstOrDefault();
+                var query = context.DailyTimeIns.Include("Activity").Where(x => x.User.UserName.Equals(userName) 
+                && x.IsActive).OrderByDescending(x => x.TimeInDttm).FirstOrDefault();
                 return query;
             }
         }

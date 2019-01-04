@@ -10,6 +10,6 @@ namespace TimeInRepository.Utilities
         List<DailyTimeOut> GetMonthTimeOut(DateTime date);
         bool InsertTimeOut(ClockOutQueryModel clockOut);
         List<DailyTimeOut> GetEmployeeMonthTimeOut(int userKey, DateTime month);
-        DailyTimeOut GetEmployeeDailyTimeOut(string userName);
+        DailyTimeOut GetEmployeeDailyTimeOut(string userName, DateTime timeIn);
     }
 }

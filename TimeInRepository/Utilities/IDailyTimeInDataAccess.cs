@@ -10,6 +10,6 @@ namespace TimeInRepository.Utilities
         List<DailyTimeIn> GetMonthTimeIn(DateTime date);
         bool InsertTimeIn(ClockInQueryModel clockIn);
         List<DailyTimeIn> GetEmployeeMonthTimeIn(int userKey, DateTime month);
-        DailyTimeIn GetEmployeeDailyTimeIn(string userName);
+        DailyTimeIn GetEmployeeRecentTimeIn(string userName);
     }
 }

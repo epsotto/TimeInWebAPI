@@ -12,9 +12,9 @@ namespace TimeInEmployeeService.Models
         public string ActivityName { get; set; }
 
         [DataMember]
-        public DateTime TimeInDateTime { get; set; }
+        public string TimeInDateTime { get; set; }
 
         [DataMember]
-        public DateTime TImeOutDateTime { get; set; }
+        public string TImeOutDateTime { get; set; }
     }
 }

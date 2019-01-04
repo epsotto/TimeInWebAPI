@@ -44,8 +44,15 @@ namespace TimeInEmployeeService.BusinessLayer
                 return "Activity ID not found.";
             }
 
+            var recentTimeIn = _dataAccess.GetEmployeeRecentTimeIn(clockIn.UserName);
+
+            if(recentTimeIn.TimeInDttm.Date == clockIn.ClockInDateTime.Date)
+            {
+                return "Already clocked in for the day.";
+            }
+
             bool isSuccess = _dataAccess.InsertTimeIn(clockIn);
-            //return isSuccess.Tostring();
+
             if (isSuccess)
             {
                 return "Employee successfully clocked in.";

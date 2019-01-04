@@ -37,16 +37,31 @@ namespace LoginService.Controllers
 
         [Route("api/Login/VerifyEmployeeClockIn")]
         [HttpPost]
-        public IHttpActionResult VerifyEmployeeClockIn([FromBody]string userName)
+        public IHttpActionResult VerifyEmployeeClockIn([FromBody]VerifyClockInModel model)
         {
             var container = ContainerConfig.Configure();
 
             using (var scope = container.BeginLifetimeScope())
             {
                 var app = scope.Resolve<ILoginBusinessRules>();
-                VerifyClockInModel verifyResult = app.VerifyEmployeeClockIn(userName);
+                VerifyClockInResultModel verifyResult = app.VerifyEmployeeClockIn(model);
 
-                return Json(new { Result = verifyResult });
+                return Json(verifyResult);
+            }
+        }
+
+        [Route("api/Login/UpdateUserPassword")]
+        [HttpPost]
+        public IHttpActionResult UpdateUserPassword([FromBody]UpdatePasswordModel model)
+        {
+            var container = ContainerConfig.Configure();
+
+            using(var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<ILoginBusinessRules>();
+                string updateResult = app.UpdateUserPassword(model);
+
+                return Json(new { Result = updateResult });
             }
         }
     }

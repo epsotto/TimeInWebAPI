@@ -66,7 +66,7 @@ namespace TimeInEmployeeService.Controllers
 
                 string clockInResult = app.ClockInEmployee(clockQuery);
 
-                return Json(clockInResult);
+                return Json(new { Result = clockInResult });
             }
         }
 
@@ -109,18 +109,18 @@ namespace TimeInEmployeeService.Controllers
 
             using (var scope = container.BeginLifetimeScope())
             {
-                var app = scope.Resolve<ITimeInEmployeeAttendance>();
-                ClockInQueryModel clockQuery = new ClockInQueryModel
+                var app = scope.Resolve<ITimeOutEmployeeAttendance>();
+                ClockOutQueryModel clockQuery = new ClockOutQueryModel
                 {
                     UserId = userQuery.UserKey,
                     UserName = clockOut.UserName,
                     ActivityId = activityQuery.ActivityId,
-                    ClockInDateTime = DateTime.Parse(clockOut.ClockOutDateTime)
+                    ClockOutDateTime = DateTime.Parse(clockOut.ClockOutDateTime)
                 };
 
-                string clockInResult = app.ClockInEmployee(clockQuery);
+                string clockOutResult = app.ClockOutEmployee(clockQuery);
 
-                return Json(clockInResult);
+                return Json(new { Result = clockOutResult });
             }
         }
 
@@ -143,6 +143,22 @@ namespace TimeInEmployeeService.Controllers
                 GeneratedReportModel result = app.GenerateMonthlyReport(getReport);
 
                 return Json(result);
+            }
+        }
+
+        [Route("api/TimeInEmployee/GetEmployeeClockInChoices")]
+        [HttpGet]
+        public IHttpActionResult GetEmployeeClockInChoices()
+        {
+            var container = ContainerConfig.Configure();
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var app = scope.Resolve<IActivityDataAccess>();
+
+                List<ActivityModel> query = app.GetAllActivities();
+
+                return Json(query);
             }
         }
     }

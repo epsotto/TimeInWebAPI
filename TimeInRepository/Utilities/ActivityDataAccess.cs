@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeInRepository.Models;
 
 namespace TimeInRepository.Utilities
 {
@@ -15,13 +16,21 @@ namespace TimeInRepository.Utilities
         ///  Gets all active Activities from database.
         /// </summary>
         /// <returns></returns>
-        public List<Activity> GetAllActivities()
+        public List<ActivityModel> GetAllActivities()
         {
-            List<Activity> activities = new List<Activity>();
+            List<ActivityModel> activities = new List<ActivityModel>();
 
             using (TimeInEntities context = new TimeInEntities())
             {
-                activities = context.Activities.Where(x => x.IsActive == true).ToList();
+                activities = context.Activities.Where(x => x.IsActive == true).Select(x => new ActivityModel {
+                    ActivityId = x.ActivityId,
+                    ActivityNm = x.ActivityNm,
+                    IsActive = x.IsActive,
+                    CreateDttm = x.CreateDttm,
+                    CreateUserId = x.CreateUserId,
+                    UpdateDttm = x.UpdateDttm,
+                    UpdateUserId = x.UpdateUserId
+                }).ToList();
             }
 
             return activities;

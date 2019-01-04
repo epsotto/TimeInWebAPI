@@ -140,17 +140,21 @@ namespace TimeInEmployee.Service.Test
         public void ClockInEmployeeTest_WhenUserNameAndReportDateIsCorrect_ReturnsSuccessMessage()
         {
             var container = ContainerConfig.Configure();
+            DateTime now = DateTime.Now;
 
             ClockInQueryModel clockIn = new ClockInQueryModel
             {
                 UserId = 10001,
                 UserName = "john.doe",
                 ActivityId = 1,
-                ClockInDateTime = DateTime.Now
+                ClockInDateTime = now
             };
 
             Mock<IDailyTimeInDataAccess> mock = new Mock<IDailyTimeInDataAccess>();
             mock.Setup(x => x.InsertTimeIn(clockIn)).Returns(true);
+            mock.Setup(x => x.GetEmployeeRecentTimeIn(clockIn.UserName)).Returns(new DailyTimeIn {
+                TimeInDttm = now.AddDays(-1)
+            });
 
             ITimeInEmployeeAttendance app = new TimeInEmployeeAttendance(mock.Object);
 

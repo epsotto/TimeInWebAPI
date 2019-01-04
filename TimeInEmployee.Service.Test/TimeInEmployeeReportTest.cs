@@ -28,14 +28,12 @@ namespace TimeInEmployee.Service.Test
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
             Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> user = new Mock<IUserDataAccess>();
-            Mock<IActivityDataAccess> activity = new Mock<IActivityDataAccess>();
 
             timeIn.Setup(x => x.GetMonthTimeIn(DateTime.Now)).Returns(new List<DailyTimeIn>());
             timeOut.Setup(x => x.GetMonthTimeOut(DateTime.Now)).Returns(new List<DailyTimeOut>());
             user.Setup(x => x.GetUser(input.UserName)).Returns(new User());
-            activity.Setup(x => x.GetActivitySingle(1)).Returns(new Activity());
 
-            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object, activity.Object);
+            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object);
 
             var output = app.GenerateMonthlyReport(input);
 
@@ -54,14 +52,12 @@ namespace TimeInEmployee.Service.Test
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
             Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> user = new Mock<IUserDataAccess>();
-            Mock<IActivityDataAccess> activity = new Mock<IActivityDataAccess>();
 
             timeIn.Setup(x => x.GetMonthTimeIn(DateTime.Now)).Returns(new List<DailyTimeIn>());
             timeOut.Setup(x => x.GetMonthTimeOut(DateTime.Now)).Returns(new List<DailyTimeOut>());
             user.Setup(x => x.GetUser(input.UserName)).Returns((User)null);
-            activity.Setup(x => x.GetActivitySingle(1)).Returns(new Activity());
 
-            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object, activity.Object);
+            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object);
 
             var output = app.GenerateMonthlyReport(input);
 
@@ -80,7 +76,6 @@ namespace TimeInEmployee.Service.Test
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
             Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> user = new Mock<IUserDataAccess>();
-            Mock<IActivityDataAccess> activity = new Mock<IActivityDataAccess>();
 
             timeIn.Setup(x => x.GetMonthTimeIn(DateTime.Now)).Returns(new List<DailyTimeIn>());
             timeOut.Setup(x => x.GetMonthTimeOut(DateTime.Now)).Returns(new List<DailyTimeOut>());
@@ -97,9 +92,8 @@ namespace TimeInEmployee.Service.Test
                 UpdateUserId = "john.doe",
                 UpdateDttm = DateTime.Now
             });
-            activity.Setup(x => x.GetActivitySingle(1)).Returns(new Activity());
 
-            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object, activity.Object);
+            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object);
 
             var output = app.GenerateMonthlyReport(input);
 
@@ -118,7 +112,6 @@ namespace TimeInEmployee.Service.Test
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
             Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> user = new Mock<IUserDataAccess>();
-            Mock<IActivityDataAccess> activity = new Mock<IActivityDataAccess>();
 
             timeIn.Setup(x => x.GetMonthTimeIn(DateTime.Now)).Returns(new List<DailyTimeIn>());
             timeOut.Setup(x => x.GetMonthTimeOut(DateTime.Now)).Returns(new List<DailyTimeOut>());
@@ -135,9 +128,8 @@ namespace TimeInEmployee.Service.Test
                 UpdateUserId = "john.doe",
                 UpdateDttm = DateTime.Now
             });
-            activity.Setup(x => x.GetActivitySingle(1)).Returns(new Activity());
 
-            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object, activity.Object);
+            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object);
 
             var output = app.GenerateMonthlyReport(input);
 
@@ -156,7 +148,6 @@ namespace TimeInEmployee.Service.Test
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
             Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> user = new Mock<IUserDataAccess>();
-            Mock<IActivityDataAccess> activity = new Mock<IActivityDataAccess>();
 
             timeIn.Setup(x => x.GetMonthTimeIn(DateTime.Now)).Returns(new List<DailyTimeIn>());
             timeOut.Setup(x => x.GetMonthTimeOut(DateTime.Now)).Returns(new List<DailyTimeOut>());
@@ -173,9 +164,8 @@ namespace TimeInEmployee.Service.Test
                 UpdateUserId = "john.doe",
                 UpdateDttm = DateTime.Now
             });
-            activity.Setup(x => x.GetActivitySingle(1)).Returns(new Activity());
 
-            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object, activity.Object);
+            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object);
 
             var output = app.GenerateMonthlyReport(input);
 
@@ -194,7 +184,6 @@ namespace TimeInEmployee.Service.Test
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
             Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> user = new Mock<IUserDataAccess>();
-            Mock<IActivityDataAccess> activity = new Mock<IActivityDataAccess>();
 
             timeIn.Setup(x => x.GetEmployeeMonthTimeIn(1, DateTime.Parse(input.ReportDate))).Returns(new List<DailyTimeIn>() {
                 new DailyTimeIn
@@ -207,7 +196,17 @@ namespace TimeInEmployee.Service.Test
                     CreateUserId = "john.doe",
                     CreateDttm = DateTime.Parse(input.ReportDate),
                     UpdateUserId = "john.doe",
-                    UpdateDttm = DateTime.Parse(input.ReportDate)
+                    UpdateDttm = DateTime.Parse(input.ReportDate),
+                    Activity = new Activity
+                    {
+                        ActivityId = 1,
+                        ActivityNm = "Activity",
+                        IsActive = true,
+                        CreateUserId = "Admin",
+                        CreateDttm = DateTime.Now,
+                        UpdateUserId = "Admin",
+                        UpdateDttm = DateTime.Now
+                    }
                 }
             });
             timeOut.Setup(x => x.GetEmployeeMonthTimeOut(1, DateTime.Parse(input.ReportDate))).Returns(new List<DailyTimeOut>() {
@@ -237,17 +236,8 @@ namespace TimeInEmployee.Service.Test
                 UpdateUserId = "john.doe",
                 UpdateDttm = DateTime.Now
             });
-            activity.Setup(x => x.GetActivitySingle(1)).Returns(new Activity() {
-                ActivityId = 1,
-                ActivityNm = "Activity",
-                IsActive = true,
-                CreateUserId = "Admin",
-                CreateDttm = DateTime.Now,
-                UpdateUserId = "Admin",
-                UpdateDttm = DateTime.Now
-            });
 
-            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object, activity.Object);
+            ITimeInEmployeeReport app = new TimeInEmployeeReport(timeIn.Object, timeOut.Object, user.Object);
 
             var output = app.GenerateMonthlyReport(input);
 

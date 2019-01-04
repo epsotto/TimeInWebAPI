@@ -19,11 +19,14 @@ namespace LoginService.BusinessLayer
     {
         IUserDataAccess _userDataAccess;
         IDailyTimeInDataAccess _timeInDataAccess;
+        IDailyTimeOutDataAccess _timeOutDataAccess;
 
-        public LoginBusinessRules(IUserDataAccess userDataDataAccess, IDailyTimeInDataAccess timeInDataAccess)
+        public LoginBusinessRules(IUserDataAccess userDataDataAccess, IDailyTimeInDataAccess timeInDataAccess, 
+            IDailyTimeOutDataAccess timeOutDataAccess)
         {
             _userDataAccess = userDataDataAccess;
             _timeInDataAccess = timeInDataAccess;
+            _timeOutDataAccess = timeOutDataAccess;
         }
 
         private readonly static string hash = "t!m3!N";
@@ -59,27 +62,86 @@ namespace LoginService.BusinessLayer
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public VerifyClockInModel VerifyEmployeeClockIn(string userName)
+        public VerifyClockInResultModel VerifyEmployeeClockIn(VerifyClockInModel model)
         {
-            VerifyClockInModel result = new VerifyClockInModel();
-            result.ClockedIn = false;
+            VerifyClockInResultModel result = new VerifyClockInResultModel()
+            {
+                ClockedIn = false
+            };
 
-            if (string.IsNullOrEmpty(userName))
+            if (string.IsNullOrEmpty(model.UserName))
             {
                 result.QueryStatus = "No data being processed.";
                 return result;
             }
 
-            var query = _timeInDataAccess.GetEmployeeDailyTimeIn(userName);
+            var query = _timeInDataAccess.GetEmployeeRecentTimeIn(model.UserName);
             if(query == null)
             {
                 result.QueryStatus = "Query success.";
                 return result;
             }
+
+            var queryTimeOut = _timeOutDataAccess.GetEmployeeDailyTimeOut(model.UserName, query.TimeInDttm);
+            if(queryTimeOut == null)
+            {
+                result.QueryStatus = "Query success.";
+                result.ActivityNm = query.Activity.ActivityNm;
+                result.ActivityId = query.ActivityCd;
+                result.ClockedIn = true;
+
+                return result;
+            }
             else
             {
                 result.QueryStatus = "Query success.";
-                result.ClockedIn = true;
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public string UpdateUserPassword(UpdatePasswordModel model)
+        {
+            if (model == null)
+            {
+                return "No data to process.";
+            }
+            if (string.IsNullOrEmpty(model.UserName))
+            {
+                return "Username is empty.";
+            }
+            if (string.IsNullOrEmpty(model.NewPassword))
+            {
+                return "New Password is empty.";
+            }
+            if (string.IsNullOrEmpty(model.PreviousPassword))
+            {
+                return "Previous Password is empty.";
+            }
+
+            var user = _userDataAccess.GetUser(model.UserName);
+            if (user == null)
+            {
+                return "User not found.";
+            }
+
+            if (user.UserPassword != EncryptPassword(model.PreviousPassword))
+            {
+                return "Previous password does not match.";
+            }
+            else
+            {
+                user.UserPassword = EncryptPassword(model.NewPassword);
+                user.UpdateDttm = DateTime.Now;
+                user.UpdateUserId = model.UserName;
+
+                var result = _userDataAccess.UpdatePassword(user.UserKey, user.UserPassword);
+
                 return result;
             }
         }

@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AuthenticateUserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateUserPasswordTest.cs" />
     <Compile Include="VerifyEmployeeClockInTest.cs" />
   </ItemGroup>
   <ItemGroup>

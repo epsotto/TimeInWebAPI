@@ -6,6 +6,7 @@ namespace LoginService.Interfaces
     {
         string VerifyValidUser(AuthenticateModel password);
         string EncryptPassword(string password);
-        VerifyClockInModel VerifyEmployeeClockIn(string userName);
+        VerifyClockInResultModel VerifyEmployeeClockIn(VerifyClockInModel model);
+        string UpdateUserPassword(UpdatePasswordModel model);
     }
 }

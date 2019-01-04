@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,6 +72,7 @@ namespace TimeInRepository.Utilities
                     newRecord.UpdateUserId = clockOut.UserName;
 
                     context.DailyTimeOuts.Add(newRecord);
+                    context.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -108,14 +110,12 @@ namespace TimeInRepository.Utilities
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public DailyTimeOut GetEmployeeDailyTimeOut(string userName)
+        public DailyTimeOut GetEmployeeDailyTimeOut(string userName, DateTime timeIn)
         {
-            DateTime today = DateTime.Now.Date;
-
             using (TimeInEntities context = new TimeInEntities())
             {
-                var query = context.DailyTimeOuts.Where(x => x.User.UserName.Equals(userName)
-                && x.IsActive && x.TimeOutDttm.Date == today).FirstOrDefault();
+                var query = context.DailyTimeOuts.Include("Activity").Where(x => x.User.UserName.Equals(userName)
+                && x.IsActive && DbFunctions.TruncateTime(x.TimeOutDttm) == timeIn.Date).FirstOrDefault();
                 return query;
             }
         }

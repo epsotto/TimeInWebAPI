@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TimeInRepository.Models;
 
 namespace TimeInRepository.Utilities
 {
@@ -6,7 +7,7 @@ namespace TimeInRepository.Utilities
     {
         string DeleteActivity(int activityId);
         Activity GetActivitySingle(int activityId);
-        List<Activity> GetAllActivities();
+        List<ActivityModel> GetAllActivities();
         string InsertActivity(Activity newActivity);
         string UpdateActivity(int activityId, Activity newActivity);
     }

@@ -32,6 +32,7 @@ namespace Login.Service.Test
             };
 
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
+            Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<IUserDataAccess> mock = new Mock<IUserDataAccess>();
             mock.Setup(x => x.GetUser(input.UserName)).Returns(new User()
             {
@@ -47,7 +48,7 @@ namespace Login.Service.Test
                 UpdateUserId = "john.doe"
             });
 
-            ILoginBusinessRules app = new LoginBusinessRules(mock.Object, timeIn.Object);
+            ILoginBusinessRules app = new LoginBusinessRules(mock.Object, timeIn.Object, timeOut.Object);
 
             var output = app.VerifyValidUser(input);
 
@@ -66,6 +67,7 @@ namespace Login.Service.Test
             string password = "Al1eq36aoBq6K0+pAA==";
 
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
+            Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<ILoginBusinessRules> mockPassword = new Mock<ILoginBusinessRules>();
             mockPassword.Setup(x => x.EncryptPassword(input.Password)).Returns(password);
 
@@ -84,7 +86,7 @@ namespace Login.Service.Test
                 UpdateUserId = "john.doe"
             });
 
-            ILoginBusinessRules app = new LoginBusinessRules(mock.Object, timeIn.Object);
+            ILoginBusinessRules app = new LoginBusinessRules(mock.Object, timeIn.Object, timeOut.Object);
 
             string encryption = app.EncryptPassword(input.Password);
             var output = app.VerifyValidUser(input);
@@ -104,6 +106,7 @@ namespace Login.Service.Test
             string password = "LTg9BIob8urwz643K5+pBA=="; //encrypted string for 'password'
 
             Mock<IDailyTimeInDataAccess> timeIn = new Mock<IDailyTimeInDataAccess>();
+            Mock<IDailyTimeOutDataAccess> timeOut = new Mock<IDailyTimeOutDataAccess>();
             Mock<ILoginBusinessRules> mockPassword = new Mock<ILoginBusinessRules>();
             mockPassword.Setup(x => x.EncryptPassword(input.Password)).Returns(password);
 
@@ -122,7 +125,7 @@ namespace Login.Service.Test
                 UpdateUserId = "john.doe"
             });
 
-            ILoginBusinessRules app = new LoginBusinessRules(mock.Object, timeIn.Object);
+            ILoginBusinessRules app = new LoginBusinessRules(mock.Object, timeIn.Object, timeOut.Object);
 
             var output = app.VerifyValidUser(input);
 
